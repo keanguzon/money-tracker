@@ -24,14 +24,41 @@ if (!defined('APP_URL')) {
             $forwardedProto = trim(explode(',', $forwardedProto, 2)[0]);
         }
 
+        $forwardedScheme = $_SERVER['HTTP_X_FORWARDED_SCHEME'] ?? '';
+        if (is_string($forwardedScheme) && str_contains($forwardedScheme, ',')) {
+            $forwardedScheme = trim(explode(',', $forwardedScheme, 2)[0]);
+        }
+
+        $forwardedProtocol = $_SERVER['HTTP_X_FORWARDED_PROTOCOL'] ?? '';
+        if (is_string($forwardedProtocol) && str_contains($forwardedProtocol, ',')) {
+            $forwardedProtocol = trim(explode(',', $forwardedProtocol, 2)[0]);
+        }
+
+        $forwardedSsl = $_SERVER['HTTP_X_FORWARDED_SSL'] ?? '';
+
         $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
         if ($forwardedProto === 'https' || $forwardedProto === 'http') {
             $scheme = $forwardedProto;
+        } elseif ($forwardedScheme === 'https' || $forwardedScheme === 'http') {
+            $scheme = $forwardedScheme;
+        } elseif ($forwardedProtocol === 'https' || $forwardedProtocol === 'http') {
+            $scheme = $forwardedProtocol;
+        } elseif (is_string($forwardedSsl) && strtolower($forwardedSsl) === 'on') {
+            $scheme = 'https';
+        } elseif (!empty($_SERVER['REQUEST_SCHEME']) && is_string($_SERVER['REQUEST_SCHEME'])) {
+            $scheme = $_SERVER['REQUEST_SCHEME'];
+        } elseif (!empty($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] === 443) {
+            $scheme = 'https';
         }
 
         $host = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? $_SERVER['HTTP_HOST'];
         if (is_string($host) && str_contains($host, ',')) {
             $host = trim(explode(',', $host, 2)[0]);
+        }
+
+        // Safe fallback: Render-provided domains are always served over HTTPS.
+        if ($scheme !== 'https' && is_string($host) && str_ends_with($host, '.onrender.com')) {
+            $scheme = 'https';
         }
         $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME']);
 
