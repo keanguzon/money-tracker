@@ -120,8 +120,8 @@
 
 .form-control:focus {
     outline: none;
-    border-color: #6366f1;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
 
 .form-control:disabled {
@@ -203,19 +203,19 @@ input[type="checkbox"] {
 }
 
 .account-option:hover {
-    border-color: #6366f1;
+    border-color: #10b981;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
 
 .account-option.selected {
-    border-color: #6366f1;
-    background: #eef2ff;
+    border-color: #10b981;
+    background: #ecfdf5;
 }
 
 :root.dark .account-option.selected {
-    background: #4338ca;
-    border-color: #6366f1;
+    background: #047857;
+    border-color: #10b981;
 }
 
 .account-option.disabled {

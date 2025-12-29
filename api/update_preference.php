@@ -1,7 +1,7 @@
 <?php
 /**
  * Update User Preferences API
- * Money Tracker Application
+ * BukoJuice Application
  */
 
 header('Content-Type: application/json');

@@ -1,6 +1,6 @@
 <?php
 /**
- * Money Tracker - Main Entry Point
+ * BukoJuice - Main Entry Point
  * 
  * A modern money tracking application
  * Built with PHP, Tailwind CSS, JavaScript

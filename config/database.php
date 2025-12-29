@@ -1,7 +1,7 @@
 <?php
 /**
  * Database Configuration
- * Money Tracker Application
+ * BukoJuice Application
  */
 
 function env_value(string $key, $default = null) {

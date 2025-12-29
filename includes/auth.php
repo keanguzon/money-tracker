@@ -1,7 +1,7 @@
 <?php
 /**
  * Authentication Helper
- * Money Tracker Application
+ * BukoJuice Application
  */
 
 require_once dirname(__DIR__) . '/config/app.php';

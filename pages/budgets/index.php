@@ -1,7 +1,7 @@
 <?php
 /**
  * Budgets Page
- * Money Tracker Application
+ * BukoJuice Application
  */
 
 $pageTitle = 'Budgets';
@@ -106,7 +106,7 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
                     ?>
                         <div class="budget-card" style="background: var(--card-bg); border-radius: 1rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
                             <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                                <div style="width: 48px; height: 48px; border-radius: 12px; background: <?= htmlspecialchars($budget['category_color'] ?? '#6366f1') ?>20; color: <?= htmlspecialchars($budget['category_color'] ?? '#6366f1') ?>; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                <div style="width: 48px; height: 48px; border-radius: 12px; background: <?= htmlspecialchars($budget['category_color'] ?? '#10b981') ?>20; color: <?= htmlspecialchars($budget['category_color'] ?? '#10b981') ?>; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
                                     💰
                                 </div>
                                 <div style="flex: 1;">

@@ -1,4 +1,4 @@
-# MoneyTrack (PHP)
+# BukoJuice (PHP)
 
 ## Run locally
 - Requires PHP 8+

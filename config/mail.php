@@ -5,8 +5,8 @@
  */
 
 define('BREVO_API_KEY', getenv('BREVO_API_KEY') ?: '');
-define('SENDER_EMAIL', getenv('SENDER_EMAIL') ?: 'no-reply@moneytracker.com');
-define('SENDER_NAME', getenv('SENDER_NAME') ?: 'Money Tracker');
+define('SENDER_EMAIL', getenv('SENDER_EMAIL') ?: 'moneytrackerbukojuice@gmail.com');
+define('SENDER_NAME', getenv('SENDER_NAME') ?: 'BukoJuice');
 
 /**
  * Send an email using Brevo API

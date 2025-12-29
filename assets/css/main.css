@@ -1,4 +1,4 @@
-/* Main Styles - Money Tracker */
+/* Main Styles - BukoJuice */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
@@ -10,8 +10,8 @@
     --text-secondary: #475569;
     --text-muted: #94a3b8;
     --border-color: #e2e8f0;
-    --accent-primary: #6366f1;
-    --accent-secondary: #8b5cf6;
+    --accent-primary: #10b981;
+    --accent-secondary: #34d399;
     --success: #10b981;
     --warning: #f59e0b;
     --danger: #ef4444;

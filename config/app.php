@@ -1,7 +1,7 @@
 <?php
 /**
  * Application Configuration
- * Money Tracker Application
+ * BukoJuice Application
  */
 
 // Start session if not already started
@@ -10,7 +10,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // Application settings
-define('APP_NAME', 'MoneyTrack');
+define('APP_NAME', 'BukoJuice');
 define('APP_VERSION', '1.0.0');
 
 // Base URL (auto-detect when running under a web server like XAMPP)

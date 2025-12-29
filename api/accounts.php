@@ -47,7 +47,7 @@ try {
             $name = $_POST['name'] ?? '';
             $type = $_POST['type'] ?? '';
             $balance = $_POST['balance'] ?? 0;
-            $color = $_POST['color'] ?? '#6366f1';
+            $color = $_POST['color'] ?? '#10b981';
             $icon = $_POST['icon'] ?? '';
             $isSavings = isset($_POST['is_savings']) && $_POST['is_savings'] == '1' ? true : false;
             $interestRate = $_POST['interest_rate'] ?? 0;
@@ -90,7 +90,7 @@ try {
             $name = $_POST['name'] ?? '';
             $type = $_POST['type'] ?? '';
             $balance = $_POST['balance'] ?? 0;
-            $color = $_POST['color'] ?? '#6366f1';
+            $color = $_POST['color'] ?? '#10b981';
             $isSavings = isset($_POST['is_savings']) ? true : false;
             $interestRate = $_POST['interest_rate'] ?? 0;
             $includeInNetworth = isset($_POST['include_in_networth']) ? true : false;

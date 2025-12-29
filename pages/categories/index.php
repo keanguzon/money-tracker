@@ -1,7 +1,7 @@
 <?php
 /**
  * Categories Page
- * Money Tracker Application
+ * BukoJuice Application
  */
 
 $pageTitle = 'Categories';

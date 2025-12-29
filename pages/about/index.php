@@ -1,7 +1,7 @@
 <?php
 /**
  * About Page
- * Money Tracker Application
+ * BukoJuice Application
  */
 
 $pageTitle = 'About';
@@ -56,7 +56,7 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
             <div class="about-hero">
                 <div class="about-hero-content">
                     <h1>Track Your Money<br>Like Never Before</h1>
-                    <p>MoneyTrack is your personal finance companion that helps you take control of your spending, save more, and achieve your financial goals with ease.</p>
+                    <p>BukoJuice is your personal finance companion that helps you take control of your spending, save more, and achieve your financial goals with ease.</p>
                 </div>
             </div>
 
@@ -162,7 +162,7 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
             <div class="about-section">
                 <div class="section-header">
                     <h2>Meet Our Team</h2>
-                    <p>The passionate people behind MoneyTrack who work hard to help you achieve financial freedom.</p>
+                    <p>The passionate people behind BukoJuice who work hard to help you achieve financial freedom.</p>
                 </div>
 
                 <div class="team-grid">
@@ -235,7 +235,7 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
             <!-- CTA Section -->
             <div class="cta-section">
                 <h2>Ready to Take Control?</h2>
-                <p>Join thousands of users who are already managing their finances better with MoneyTrack.</p>
+                <p>Join thousands of users who are already managing their finances better with BukoJuice.</p>
                 <div class="cta-buttons">
                     <a href="<?= APP_URL ?>/pages/dashboard/" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

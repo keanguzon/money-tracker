@@ -1,7 +1,7 @@
 <?php
 /**
  * OAuth Configuration
- * Money Tracker Application
+ * BukoJuice Application
  * 
  * Set these environment variables in Render (or .env locally):
  * - GOOGLE_CLIENT_ID
@@ -152,7 +152,7 @@ function getGitHubUser($code) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Authorization: Bearer ' . $tokens['access_token'],
-        'User-Agent: MoneyTracker-App',
+        'User-Agent: BukoJuice-App',
         'Accept: application/vnd.github.v3+json'
     ]);
     $response = curl_exec($ch);
@@ -172,7 +172,7 @@ function getGitHubUser($code) {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Authorization: Bearer ' . $tokens['access_token'],
-            'User-Agent: MoneyTracker-App',
+            'User-Agent: BukoJuice-App',
             'Accept: application/vnd.github.v3+json'
         ]);
         $response = curl_exec($ch);

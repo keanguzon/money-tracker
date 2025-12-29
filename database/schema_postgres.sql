@@ -1,4 +1,4 @@
--- Money Tracker Database Schema (PostgreSQL / Supabase)
+-- BukoJuice Database Schema (PostgreSQL / Supabase)
 -- LemoneyD-style with Accounts/E-wallets
 
 -- Users table

@@ -1,7 +1,7 @@
 <?php
 /**
  * Login Page
- * Money Tracker Application
+ * BukoJuice Application
  */
 
 $pageTitle = 'Login';
@@ -74,10 +74,7 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
         <div class="login-banner">
             <div class="login-banner-content">
                 <div class="login-banner-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="1" x2="12" y2="23"></line>
-                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                    </svg>
+                    <img src="<?= APP_URL ?>/assets/images/logos/main-logo.png" alt="<?= APP_NAME ?>" style="width: 50px; height: auto;">
                 </div>
                 <h1>Welcome to<br><?= APP_NAME ?></h1>
                 <p>Take control of your finances with our powerful yet simple money tracking application. Track expenses, manage budgets, and achieve your financial goals.</p>

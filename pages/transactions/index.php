@@ -1,7 +1,7 @@
 <?php
 /**
  * Transactions Page
- * Money Tracker Application
+ * BukoJuice Application
  */
 
 $pageTitle = 'Transactions';

@@ -1,11 +1,11 @@
 /**
  * Dark Mode Toggle
- * Money Tracker Application
+ * BukoJuice Application
  */
 
 class DarkMode {
     constructor() {
-        this.darkModeKey = 'moneytrack_darkmode';
+        this.darkModeKey = 'bukojuice_darkmode';
         this.init();
     }
 

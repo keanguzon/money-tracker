@@ -1,7 +1,7 @@
 <?php
 /**
  * Dashboard Page
- * Money Tracker Application
+ * BukoJuice Application
  */
 
 $pageTitle = 'Dashboard';

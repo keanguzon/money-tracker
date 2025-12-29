@@ -439,7 +439,7 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
                 <div class="form-group">
                     <label for="editAccountColor">Color</label>
                     <select id="editAccountColor" name="color" class="form-control">
-                        <option value="#6366f1">Indigo</option>
+                        <option value="#10b981">Buko Green</option>
                         <option value="#007DFE">Blue</option>
                         <option value="#00D632">Green</option>
                         <option value="#FF6B00">Orange</option>

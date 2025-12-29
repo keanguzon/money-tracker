@@ -1,6 +1,6 @@
 /**
  * Main JavaScript
- * Money Tracker Application
+ * BukoJuice Application
  */
 
 // Utility Functions

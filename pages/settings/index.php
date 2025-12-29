@@ -1,7 +1,7 @@
 <?php
 /**
  * Settings Page
- * Money Tracker Application
+ * BukoJuice Application
  */
 
 $pageTitle = 'Settings';
@@ -380,12 +380,12 @@ document.querySelectorAll('.theme-option').forEach(option => {
         const theme = this.dataset.theme;
         if (theme === 'dark') {
             document.documentElement.classList.add('dark');
-            localStorage.setItem('moneytrack_darkmode', 'true');
+            localStorage.setItem('bukojuice_darkmode', 'true');
         } else if (theme === 'light') {
             document.documentElement.classList.remove('dark');
-            localStorage.setItem('moneytrack_darkmode', 'false');
+            localStorage.setItem('bukojuice_darkmode', 'false');
         } else {
-            localStorage.removeItem('moneytrack_darkmode');
+            localStorage.removeItem('bukojuice_darkmode');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             document.documentElement.classList.toggle('dark', prefersDark);
         }
@@ -401,7 +401,7 @@ document.querySelectorAll('.currency-option').forEach(option => {
 });
 
 // Set initial theme option
-const savedTheme = localStorage.getItem('moneytrack_darkmode');
+const savedTheme = localStorage.getItem('bukojuice_darkmode');
 if (savedTheme === 'true') {
     document.querySelector('[data-theme="dark"]').classList.add('active');
 } else if (savedTheme === 'false') {

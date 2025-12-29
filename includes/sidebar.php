@@ -1,7 +1,7 @@
 <?php
 /**
  * Sidebar Include
- * Money Tracker Application
+ * BukoJuice Application
  */
 
 $currentPage = $currentPage ?? '';
@@ -15,12 +15,7 @@ $user = getCurrentUser();
 <aside class="sidebar">
     <div class="sidebar-header">
         <a href="<?= APP_URL ?>/pages/dashboard/" class="logo">
-            <div class="logo-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="12" y1="1" x2="12" y2="23"></line>
-                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                </svg>
-            </div>
+            <img src="<?= APP_URL ?>/assets/images/logos/main-logo.png" alt="<?= APP_NAME ?>" style="height: 40px; width: auto;">
             <span class="logo-text"><?= APP_NAME ?></span>
         </a>
     </div>

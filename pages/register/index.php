@@ -1,7 +1,7 @@
 <?php
 /**
  * Register Page
- * Money Tracker Application
+ * BukoJuice Application
  */
 
 $pageTitle = 'Create Account';
@@ -103,12 +103,7 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
         <div class="login-banner">
             <div class="login-banner-content">
                 <div class="login-banner-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="8.5" cy="7" r="4"></circle>
-                        <line x1="20" y1="8" x2="20" y2="14"></line>
-                        <line x1="23" y1="11" x2="17" y2="11"></line>
-                    </svg>
+                    <img src="<?= APP_URL ?>/assets/images/logos/main-logo.png" alt="<?= APP_NAME ?>" style="width: 50px; height: auto;">
                 </div>
                 <h1>Join<br><?= APP_NAME ?></h1>
                 <p>Start your journey to financial freedom. Create an account and take the first step towards managing your money smarter.</p>

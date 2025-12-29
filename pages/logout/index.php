@@ -1,7 +1,7 @@
 <?php
 /**
  * Logout Handler
- * Money Tracker Application
+ * BukoJuice Application
  */
 
 require_once dirname(dirname(__DIR__)) . '/config/app.php';
