@@ -10,9 +10,19 @@
 require_once __DIR__ . '/../config/database.php';
 
 $migrations = [
+    'add_oauth_columns' => "
+        ALTER TABLE users ADD COLUMN IF NOT EXISTS oauth_provider VARCHAR(20);
+        ALTER TABLE users ADD COLUMN IF NOT EXISTS oauth_provider_id VARCHAR(100);
+        ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar TEXT;
+        CREATE INDEX IF NOT EXISTS idx_users_oauth ON users(oauth_provider, oauth_provider_id);
+    ",
     'add_profile_picture' => "
         ALTER TABLE users ADD COLUMN IF NOT EXISTS profile_picture TEXT;
         CREATE INDEX IF NOT EXISTS idx_users_profile_picture ON users(profile_picture);
+    ",
+    'add_is_verified' => "
+        ALTER TABLE users ADD COLUMN IF NOT EXISTS is_verified BOOLEAN DEFAULT FALSE;
+        CREATE INDEX IF NOT EXISTS idx_users_is_verified ON users(is_verified);
     "
 ];
 
@@ -67,7 +77,9 @@ $migrations = [
     <div class="migration">
         <h3>Pending Migrations:</h3>
         <ul>
+            <li><strong>add_oauth_columns</strong> - Adds oauth_provider, oauth_provider_id, and avatar columns</li>
             <li><strong>add_profile_picture</strong> - Adds profile_picture column to users table</li>
+            <li><strong>add_is_verified</strong> - Adds is_verified column for email verification</li>
         </ul>
     </div>
     
