@@ -43,7 +43,20 @@ class Database {
             ];
             $this->connection = new PDO($dsn, DB_USER, DB_PASS, $options);
         } catch (PDOException $e) {
-            die("Database connection failed: " . $e->getMessage());
+            $availableDrivers = [];
+            try {
+                $availableDrivers = PDO::getAvailableDrivers();
+            } catch (Throwable $ignored) {
+                $availableDrivers = [];
+            }
+
+            $driverInfo = 'DB_DRIVER=' . DB_DRIVER;
+            if (!empty($availableDrivers)) {
+                $driverInfo .= ' (available: ' . implode(', ', $availableDrivers) . ')';
+            }
+
+            error_log('Database connection failed: ' . $e->getMessage() . ' | ' . $driverInfo);
+            die("Database connection failed: " . $e->getMessage() . ' | ' . $driverInfo);
         }
     }
 
