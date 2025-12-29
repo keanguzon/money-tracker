@@ -46,12 +46,12 @@ try {
             // Create new account
             $name = $_POST['name'] ?? '';
             $type = $_POST['type'] ?? '';
-            $balance = $_POST['balance'] ?? 0;
+            $balance = floatval($_POST['balance'] ?? 0);
             $color = $_POST['color'] ?? '#10b981';
             $icon = $_POST['icon'] ?? '';
-            $isSavings = isset($_POST['is_savings']) && $_POST['is_savings'] == '1' ? true : false;
-            $interestRate = $_POST['interest_rate'] ?? 0;
-            $includeInNetworth = isset($_POST['include_in_networth']) ? true : false;
+            $isSavings = !empty($_POST['is_savings']) ? true : false;
+            $interestRate = floatval($_POST['interest_rate'] ?? 0);
+            $includeInNetworth = !empty($_POST['include_in_networth']) ? true : false;
 
             if (empty($name) || empty($type)) {
                 http_response_code(400);
@@ -71,10 +71,10 @@ try {
                 $balance,
                 $color,
                 $icon,
-                $isSavings,
+                $isSavings ? 'true' : 'false',
                 $interestRate,
-                $includeInNetworth,
-                true
+                $includeInNetworth ? 'true' : 'false',
+                'true'
             ]);
 
             if ($result) {
@@ -89,12 +89,12 @@ try {
             $id = $_POST['id'] ?? '';
             $name = $_POST['name'] ?? '';
             $type = $_POST['type'] ?? '';
-            $balance = $_POST['balance'] ?? 0;
+            $balance = floatval($_POST['balance'] ?? 0);
             $color = $_POST['color'] ?? '#10b981';
-            $isSavings = isset($_POST['is_savings']) ? true : false;
-            $interestRate = $_POST['interest_rate'] ?? 0;
-            $includeInNetworth = isset($_POST['include_in_networth']) ? true : false;
-            $isActive = isset($_POST['is_active']) ? true : false;
+            $isSavings = !empty($_POST['is_savings']) ? true : false;
+            $interestRate = floatval($_POST['interest_rate'] ?? 0);
+            $includeInNetworth = !empty($_POST['include_in_networth']) ? true : false;
+            $isActive = !empty($_POST['is_active']) ? true : false;
 
             if (empty($id) || empty($name) || empty($type)) {
                 http_response_code(400);
@@ -113,10 +113,10 @@ try {
                 $type,
                 $balance,
                 $color,
-                $isSavings,
+                $isSavings ? 'true' : 'false',
                 $interestRate,
-                $includeInNetworth,
-                $isActive,
+                $includeInNetworth ? 'true' : 'false',
+                $isActive ? 'true' : 'false',
                 $id,
                 $user['id']
             ]);
