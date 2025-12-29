@@ -1,0 +1,13 @@
+# Secrets
+.env
+
+# Common
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Dependency/vendor dirs (if you add composer/node later)
+vendor/
+node_modules/

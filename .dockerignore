@@ -1,0 +1,8 @@
+.git
+.gitignore
+.env
+database/
+*.sql
+*.log
+node_modules/
+vendor/
