@@ -25,6 +25,9 @@ define('DB_CHARSET', env_value('DB_CHARSET', 'utf8mb4'));
 // For Postgres/Supabase, SSL is typically required (use: require)
 define('DB_SSLMODE', env_value('DB_SSLMODE', 'prefer'));
 
+// Optional: force IPv4 by providing an explicit host address (useful on platforms without IPv6 egress)
+define('DB_HOSTADDR', env_value('DB_HOSTADDR', ''));
+
 class Database {
     private static $instance = null;
     private $connection;
@@ -32,7 +35,28 @@ class Database {
     private function __construct() {
         try {
             if (DB_DRIVER === 'pgsql') {
-                $dsn = "pgsql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";sslmode=" . DB_SSLMODE;
+                $hostaddr = '';
+
+                if (is_string(DB_HOSTADDR) && DB_HOSTADDR !== '') {
+                    $hostaddr = DB_HOSTADDR;
+                } else {
+                    // Prefer IPv4 when possible to avoid "Network is unreachable" on IPv6-only DNS answers.
+                    // This is especially common when connecting to Supabase from some PaaS providers.
+                    try {
+                        $records = dns_get_record(DB_HOST, DNS_A);
+                        if (is_array($records) && !empty($records[0]['ip'])) {
+                            $hostaddr = $records[0]['ip'];
+                        }
+                    } catch (Throwable $ignored) {
+                        $hostaddr = '';
+                    }
+                }
+
+                $dsn = "pgsql:host=" . DB_HOST;
+                if ($hostaddr !== '') {
+                    $dsn .= ";hostaddr=" . $hostaddr;
+                }
+                $dsn .= ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";sslmode=" . DB_SSLMODE;
             } else {
                 $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
             }
