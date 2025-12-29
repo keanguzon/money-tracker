@@ -1,6 +1,6 @@
 /* Settings Page Styles */
 .settings-page {
-    padding: 0;
+    /* Padding inherited from .dashboard-content */
 }
 
 .settings-header {

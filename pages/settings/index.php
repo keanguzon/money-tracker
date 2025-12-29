@@ -88,7 +88,6 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
         <!-- Page Content -->
         <div class="dashboard-content settings-page">
             <div class="settings-header">
-                <h1>Settings</h1>
                 <p>Manage your account settings and preferences</p>
             </div>
 

@@ -135,7 +135,6 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
             <!-- Page Header -->
             <div class="page-header">
                 <div>
-                    <h1 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem;">Transactions</h1>
                     <p style="color: var(--text-muted); font-size: 0.875rem;">
                         Showing <?= number_format($totalRecords) ?> transactions
                         • Income: <span style="color: var(--success);"><?= formatCurrency($totals['total_income'], $user['currency']) ?></span>

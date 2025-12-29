@@ -344,14 +344,7 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
             </div>
 
             <div class="dashboard-row">
-                <!-- Charts Section -->
-                                <path d="M14 8h.01"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="stat-value"><?= formatCurrency($balance, $user['currency']) ?></div>
-                    <div class="stat-label">Current Balance</div>
-                </div>
+
 
                 <div class="stat-card savings">
                     <div class="stat-header">

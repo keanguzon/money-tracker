@@ -1,6 +1,6 @@
 /* Transactions Page Styles */
 .transactions-page {
-    padding: 0;
+    /* Padding inherited from .dashboard-content */
 }
 
 /* Page Header */
