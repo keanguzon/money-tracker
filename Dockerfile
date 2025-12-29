@@ -1,11 +1,11 @@
 FROM php:8.3-cli
 
-# Install PDO drivers (Postgres for Supabase + MySQL as fallback)
+# Install PDO drivers (Postgres for Supabase + MySQL as fallback) + curl for OAuth
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends libpq-dev libpq5 \
-  && docker-php-ext-install pdo_pgsql pgsql pdo_mysql \
-  && php -m | grep -E '(^|\s)(pdo_pgsql|pgsql|pdo_mysql)(\s|$)' \
-  && apt-get purge -y --auto-remove libpq-dev \
+  && apt-get install -y --no-install-recommends libpq-dev libpq5 libcurl4-openssl-dev \
+  && docker-php-ext-install pdo_pgsql pgsql pdo_mysql curl \
+  && php -m | grep -E '(^|\s)(pdo_pgsql|pgsql|pdo_mysql|curl)(\s|$)' \
+  && apt-get purge -y --auto-remove libpq-dev libcurl4-openssl-dev \
   && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
