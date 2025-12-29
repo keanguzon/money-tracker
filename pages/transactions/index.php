@@ -362,17 +362,26 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
                 <!-- Account -->
                 <div class="form-group">
                     <label class="form-label">Account</label>
-                    <select name="account_id" class="form-input" required>
+                    <select name="account_id" class="form-input" id="accountSelect" required>
                         <option value="">Select account</option>
                         <?php
                         $stmt = $db->prepare("SELECT id, name, type, balance FROM accounts WHERE user_id = ? AND is_active = TRUE ORDER BY name");
                         $stmt->execute([$user['id']]);
                         $userAccounts = $stmt->fetchAll() ?: [];
-                        foreach ($userAccounts as $acc): 
+                        if (empty($userAccounts)):
                         ?>
-                            <option value="<?= $acc['id'] ?>"><?= htmlspecialchars($acc['name']) ?> (<?= formatCurrency($acc['balance'], $user['currency']) ?>)</option>
-                        <?php endforeach; ?>
+                            <option value="" disabled>No accounts available</option>
+                        <?php else: ?>
+                            <?php foreach ($userAccounts as $acc): ?>
+                                <option value="<?= $acc['id'] ?>"><?= htmlspecialchars($acc['name']) ?> (<?= formatCurrency($acc['balance'], $user['currency']) ?>)</option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </select>
+                    <?php if (empty($userAccounts)): ?>
+                        <p style="color: var(--danger); font-size: 0.875rem; margin-top: 0.5rem;">
+                            You don't have any accounts yet. <a href="<?= APP_URL ?>/pages/accounts/" style="color: var(--primary); text-decoration: underline;">Create an account first</a>
+                        </p>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Category -->

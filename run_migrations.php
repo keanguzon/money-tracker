@@ -26,8 +26,6 @@ $migrations = [
     ",
     'add_account_to_transactions' => "
         ALTER TABLE transactions ADD COLUMN IF NOT EXISTS account_id INTEGER;
-        ALTER TABLE transactions ADD CONSTRAINT fk_transactions_account 
-            FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE SET NULL;
         CREATE INDEX IF NOT EXISTS idx_transactions_account ON transactions(account_id);
     "
 ];
