@@ -8,12 +8,16 @@ services:
     envVars:
       - key: DB_DRIVER
         value: pgsql
+      - key: DB_HOST
+        sync: false
       - key: DB_PORT
         value: "5432"
       - key: DB_NAME
         value: postgres
+      - key: DB_USER
+        sync: false
+      - key: DB_PASS
+        sync: false
       - key: DB_SSLMODE
         value: require
-      # Set these in Render Dashboard (don't commit secrets):
-      # DB_HOST, DB_USER, DB_PASS
-      # APP_URL (optional; app auto-detects)
+      # Optional (app auto-detects): APP_URL
