@@ -168,7 +168,7 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
                         <input type="checkbox" name="remember">
                         <span>Remember me</span>
                     </label>
-                    <a href="#" class="forgot-password">Forgot password?</a>
+                    <a href="<?= APP_URL ?>/pages/forgot-password/" class="forgot-password">Forgot password?</a>
                 </div>
 
                 <button type="submit" class="btn btn-primary login-btn">
