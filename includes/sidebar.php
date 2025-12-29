@@ -115,8 +115,10 @@ $user = getCurrentUser();
 
     <div class="sidebar-footer">
         <div class="user-card" onclick="window.location.href='<?= APP_URL ?>/pages/settings/'">
-            <div class="user-avatar">
-                <?= $user ? strtoupper(substr($user['full_name'] ?? $user['username'], 0, 1)) : 'U' ?>
+            <div class="user-avatar" <?php if (!empty($user['profile_picture'])): ?>style="background-image: url('<?= htmlspecialchars($user['profile_picture']) ?>'); background-size: cover; background-position: center;"<?php endif; ?>>
+                <?php if (empty($user['profile_picture'])): ?>
+                    <?= $user ? strtoupper(substr($user['full_name'] ?? $user['username'], 0, 1)) : 'U' ?>
+                <?php endif; ?>
             </div>
             <div class="user-info">
                 <h4><?= $user ? htmlspecialchars($user['full_name'] ?? $user['username']) : 'Guest' ?></h4>

@@ -81,7 +81,7 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
         <!-- Page Content -->
         <div class="dashboard-content">
             <!-- Net Worth Card -->
-            <div class="card" style="margin-bottom: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+            <div class="card" style="margin-bottom: 2rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none;">
                 <div class="card-body" style="padding: 2rem;">
                     <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.5rem;">Total Net Worth</div>
                     <div style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;">

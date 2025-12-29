@@ -54,16 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         $result = registerUser($username, $email, $password, $fullName);
         if ($result['success']) {
-            // Send verification email
-            $emailSent = sendVerificationEmail($email, $fullName);
-            // Store registration data in session for modal
-            $_SESSION['pending_verification'] = [
-                'email' => $email,
-                'full_name' => $fullName,
-                'email_sent' => $emailSent
-            ];
-            // Redirect to same page to show modal
-            redirect('/pages/register/?verify=1');
+            // Auto-login and redirect to dashboard
+            redirect('/pages/dashboard/');
         } else {
             $error = $result['message'];
         }

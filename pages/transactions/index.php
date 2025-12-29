@@ -390,13 +390,16 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
     </div>
 </div>
 
+<?php require_once dirname(dirname(__DIR__)) . '/includes/footer.php'; ?>
+
 <script>
-function openModal(id) {
+// Override modal functions to work with .active class for transactions page
+window.openModal = function(id) {
     document.getElementById(id).classList.add('active');
     document.body.style.overflow = 'hidden';
 }
 
-function closeModal(id) {
+window.closeModal = function(id) {
     document.getElementById(id).classList.remove('active');
     document.body.style.overflow = '';
 }
@@ -477,5 +480,3 @@ if (urlParams.get('action') === 'add') {
     }
 }
 </script>
-
-<?php require_once dirname(dirname(__DIR__)) . '/includes/footer.php'; ?>

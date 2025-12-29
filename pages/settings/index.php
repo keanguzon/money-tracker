@@ -164,8 +164,10 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
                                 <input type="hidden" name="action" value="update_profile">
                                 
                                 <div class="profile-header">
-                                    <div class="profile-avatar-large">
-                                        <?= strtoupper(substr($user['full_name'] ?? $user['username'], 0, 1)) ?>
+                                    <div class="profile-avatar-large" <?php if (!empty($user['profile_picture'])): ?>style="background-image: url('<?= htmlspecialchars($user['profile_picture']) ?>'); background-size: cover; background-position: center;"<?php endif; ?>>
+                                        <?php if (empty($user['profile_picture'])): ?>
+                                            <?= strtoupper(substr($user['full_name'] ?? $user['username'], 0, 1)) ?>
+                                        <?php endif; ?>
                                         <label class="avatar-upload">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
@@ -422,6 +424,68 @@ document.querySelectorAll('.settings-nav-item').forEach(item => {
         this.classList.add('active');
     });
 });
+
+// Handle profile picture upload
+const avatarInput = document.querySelector('.avatar-upload input[type="file"]');
+if (avatarInput) {
+    avatarInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            Utils.showToast('Please select an image file', 'error');
+            return;
+        }
+        
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            Utils.showToast('Image size must be less than 5MB', 'error');
+            return;
+        }
+        
+        // Preview the image
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const avatarEl = document.querySelector('.profile-avatar-large');
+            if (avatarEl) {
+                avatarEl.style.backgroundImage = `url(${e.target.result})`;
+                avatarEl.style.backgroundSize = 'cover';
+                avatarEl.style.backgroundPosition = 'center';
+                avatarEl.textContent = '';
+            }
+        };
+        reader.readAsDataURL(file);
+        
+        // Upload the image
+        const formData = new FormData();
+        formData.append('profile_picture', file);
+        
+        fetch('<?= APP_URL ?>/api/upload_profile_picture.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Utils.showToast('Profile picture updated successfully', 'success');
+                // Update sidebar avatar if exists
+                const sidebarAvatar = document.querySelector('.sidebar .user-profile .user-avatar');
+                if (sidebarAvatar && data.picture_url) {
+                    sidebarAvatar.style.backgroundImage = `url(${data.picture_url})`;
+                    sidebarAvatar.style.backgroundSize = 'cover';
+                    sidebarAvatar.textContent = '';
+                }
+            } else {
+                Utils.showToast(data.message || 'Failed to upload profile picture', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Upload error:', error);
+            Utils.showToast('An error occurred while uploading', 'error');
+        });
+    });
+}
 </script>
 
 <?php require_once dirname(dirname(__DIR__)) . '/includes/footer.php'; ?>

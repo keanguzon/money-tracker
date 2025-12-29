@@ -52,14 +52,14 @@ function registerUser($username, $email, $password, $fullName = '') {
     
     // Insert user
     try {
-        // Default is_verified to FALSE for email registration
-        $stmt = $db->prepare("INSERT INTO users (username, email, password, full_name, is_verified) VALUES (?, ?, ?, ?, FALSE)");
+        // Set is_verified to TRUE by default (no email verification)
+        $stmt = $db->prepare("INSERT INTO users (username, email, password, full_name, is_verified) VALUES (?, ?, ?, ?, TRUE)");
         $stmt->execute([$username, $email, $hashedPassword, $fullName]);
         
         $userId = $db->lastInsertId();
         
-        // Do NOT auto-login yet, wait for verification
-        // $_SESSION['user_id'] = $userId;
+        // Auto-login after registration
+        $_SESSION['user_id'] = $userId;
         
         return ['success' => true, 'user_id' => $userId];
     } catch (PDOException $e) {
@@ -85,14 +85,6 @@ function loginUser($email, $password, $remember = false) {
     // Verify password
     if (!password_verify($password, $user['password'])) {
         return ['success' => false, 'message' => 'Invalid email or password'];
-    }
-
-    // Check if verified
-    if (isset($user['is_verified']) && !$user['is_verified']) {
-        // Allow login if it's an OAuth user (they are verified by provider)
-        if (empty($user['oauth_provider'])) {
-            return ['success' => false, 'message' => 'Please verify your email address first.'];
-        }
     }
     
     // Set session
