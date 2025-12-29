@@ -359,6 +359,22 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
                     </div>
                 </div>
 
+                <!-- Account -->
+                <div class="form-group">
+                    <label class="form-label">Account</label>
+                    <select name="account_id" class="form-input" required>
+                        <option value="">Select account</option>
+                        <?php
+                        $stmt = $db->prepare("SELECT id, name, type, balance FROM accounts WHERE user_id = ? AND is_active = TRUE ORDER BY name");
+                        $stmt->execute([$user['id']]);
+                        $userAccounts = $stmt->fetchAll() ?: [];
+                        foreach ($userAccounts as $acc): 
+                        ?>
+                            <option value="<?= $acc['id'] ?>"><?= htmlspecialchars($acc['name']) ?> (<?= formatCurrency($acc['balance'], $user['currency']) ?>)</option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
                 <!-- Category -->
                 <div class="form-group">
                     <label class="form-label">Category</label>

@@ -23,6 +23,12 @@ $migrations = [
     'add_is_verified' => "
         ALTER TABLE users ADD COLUMN IF NOT EXISTS is_verified BOOLEAN DEFAULT FALSE;
         CREATE INDEX IF NOT EXISTS idx_users_is_verified ON users(is_verified);
+    ",
+    'add_account_to_transactions' => "
+        ALTER TABLE transactions ADD COLUMN IF NOT EXISTS account_id INTEGER;
+        ALTER TABLE transactions ADD CONSTRAINT fk_transactions_account 
+            FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE SET NULL;
+        CREATE INDEX IF NOT EXISTS idx_transactions_account ON transactions(account_id);
     "
 ];
 
@@ -87,6 +93,7 @@ $migrations = [
                 <li><strong>add_oauth_columns</strong> - Adds oauth_provider, oauth_provider_id, and avatar columns</li>
                 <li><strong>add_profile_picture</strong> - Adds profile_picture column to users table</li>
                 <li><strong>add_is_verified</strong> - Adds is_verified column for email verification</li>
+                <li><strong>add_account_to_transactions</strong> - Links transactions to accounts for balance tracking</li>
             </ul>
         </div>
         

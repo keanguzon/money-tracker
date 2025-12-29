@@ -24,13 +24,18 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $user = getCurrentUser();
 
-// Get JSON input
-$input = json_decode(file_get_contents('php://input'), true);
+// Get input from either JSON or FormData
+$contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+if (strpos($contentType, 'application/json') !== false) {
+    $input = json_decode(file_get_contents('php://input'), true);
+} else {
+    $input = $_POST;
+}
 
 // Validate required fields
-$required = ['type', 'category_id', 'amount', 'description'];
+$required = ['type', 'category_id', 'amount', 'account_id'];
 foreach ($required as $field) {
-    if (empty($input[$field])) {
+    if (!isset($input[$field]) || $input[$field] === '') {
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => "Field '$field' is required"]);
         exit;
@@ -52,44 +57,80 @@ if ($amount <= 0) {
     exit;
 }
 
+// Get description (optional)
+$description = $input['description'] ?? '';
+
 // Get transaction date or use current date
 $transactionDate = !empty($input['transaction_date']) ? $input['transaction_date'] : date('Y-m-d');
 
 try {
     $db = Database::getInstance()->getConnection();
     
+    // Start transaction
+    $db->beginTransaction();
+    
     // Verify category exists and belongs to user or is default
     $stmt = $db->prepare("SELECT id FROM categories WHERE id = ? AND (user_id = ? OR user_id IS NULL)");
     $stmt->execute([$input['category_id'], $user['id']]);
     
     if (!$stmt->fetch()) {
+        $db->rollBack();
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'Invalid category']);
         exit;
     }
     
+    // Verify account exists and belongs to user
+    $stmt = $db->prepare("SELECT id, balance FROM accounts WHERE id = ? AND user_id = ?");
+    $stmt->execute([$input['account_id'], $user['id']]);
+    $account = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$account) {
+        $db->rollBack();
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Invalid account']);
+        exit;
+    }
+    
     // Insert transaction
     $stmt = $db->prepare("
-        INSERT INTO transactions (user_id, category_id, type, amount, description, transaction_date) 
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO transactions (user_id, account_id, category_id, type, amount, description, transaction_date) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)
     ");
     
     $stmt->execute([
         $user['id'],
+        $input['account_id'],
         $input['category_id'],
         $input['type'],
         $amount,
-        $input['description'],
+        $description,
         $transactionDate
     ]);
     
     $transactionId = $db->lastInsertId();
     
-    // Fetch the created transaction with category name
+    // Update account balance
+    if ($input['type'] === 'income') {
+        $newBalance = $account['balance'] + $amount;
+    } else {
+        $newBalance = $account['balance'] - $amount;
+    }
+    
+    $stmt = $db->prepare("UPDATE accounts SET balance = ? WHERE id = ?");
+    $stmt->execute([$newBalance, $input['account_id']]);
+    
+    
+    // Commit transaction
+    $db->commit();
+    
+    // Fetch the created transaction with category name and account name
     $stmt = $db->prepare("
-        SELECT t.*, c.name as category_name, c.icon as category_icon, c.color as category_color
+        SELECT t.*, c.name as category_name, c.icon as category_icon, c.color as category_color,
+               a.name as account_name
         FROM transactions t
         LEFT JOIN categories c ON t.category_id = c.id
+        LEFT JOIN accounts a ON t.account_id = a.id
         WHERE t.id = ?
     ");
     $stmt->execute([$transactionId]);
@@ -102,6 +143,9 @@ try {
     ]);
     
 } catch (PDOException $e) {
+    if ($db->inTransaction()) {
+        $db->rollBack();
+    }
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
 }
