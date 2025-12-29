@@ -48,12 +48,18 @@ function sendEmail($toEmail, $toName, $subject, $htmlContent) {
     
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($ch);
     curl_close($ch);
 
     if ($httpCode >= 200 && $httpCode < 300) {
         return true;
     } else {
-        error_log('Brevo Email Error: ' . $response);
+        // Log detailed error for debugging
+        error_log("Brevo Email Failed. HTTP Code: $httpCode");
+        if ($curlError) {
+            error_log("Curl Error: $curlError");
+        }
+        error_log("Brevo Response: " . $response);
         return false;
     }
 }
