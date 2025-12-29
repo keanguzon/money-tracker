@@ -54,13 +54,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         $result = registerUser($username, $email, $password, $fullName);
         if ($result['success']) {
-            setFlashMessage('success', 'Account created successfully! Welcome to ' . APP_NAME);
-            redirect('/pages/dashboard/');
+            // Send verification email
+            $emailSent = sendVerificationEmail($email, $fullName);
+            // Store registration data in session for modal
+            $_SESSION['pending_verification'] = [
+                'email' => $email,
+                'full_name' => $fullName,
+                'email_sent' => $emailSent
+            ];
+            // Redirect to same page to show modal
+            redirect('/pages/register/?verify=1');
         } else {
             $error = $result['message'];
         }
     }
 }
+
+// Check if we should show verification modal
+$showVerifyModal = isset($_GET['verify']) && isset($_SESSION['pending_verification']);
+$verificationData = $_SESSION['pending_verification'] ?? null;
 
 require_once dirname(dirname(__DIR__)) . '/includes/header.php';
 ?>
@@ -246,6 +258,244 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
         </div>
     </div>
 </div>
+
+<!-- Verify Email Modal -->
+<?php if ($showVerifyModal && $verificationData): ?>
+<div class="modal-overlay" id="verifyModal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3>Verify Your Email</h3>
+        </div>
+        <div class="modal-body">
+            <div class="verify-email-content">
+                <div class="verify-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </div>
+                <p style="text-align: center; margin-bottom: 20px;">
+                    We've sent a 6-digit verification code to<br>
+                    <strong><?= htmlspecialchars($verificationData['email']) ?></strong>
+                </p>
+                
+                <?php if (!$verificationData['email_sent']): ?>
+                    <div class="error-message" style="margin-bottom: 15px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                        Failed to send email. Please try resending.
+                    </div>
+                <?php endif; ?>
+                
+                <div id="verifyError" class="error-message" style="display: none; margin-bottom: 15px;">
+
+// Verify Email Modal
+<?php if ($showVerifyModal && $verificationData): ?>
+const verifyModal = document.getElementById('verifyModal');
+const verifyForm = document.getElementById('verifyForm');
+const otpInput = document.getElementById('otpInput');
+const verifyBtn = document.getElementById('verifyBtn');
+const verifyError = document.getElementById('verifyError');
+const verifyErrorText = document.getElementById('verifyErrorText');
+const resendLink = document.getElementById('resendLink');
+
+// Auto-focus OTP input
+setTimeout(() => otpInput.focus(), 100);
+
+// Handle form submission
+verifyForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const otp = otpInput.value.trim();
+    if (otp.length !== 6) {
+        showError('Please enter a 6-digit code');
+        return;
+    }
+    
+    verifyBtn.disabled = true;
+    verifyBtn.textContent = 'Verifying...';
+    verifyError.style.display = 'none';
+    
+    try {
+        const response = await fetch('<?= APP_URL ?>/api/auth/verify-otp.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: '<?= htmlspecialchars($verificationData['email'] ?? '') ?>',
+                otp: otp
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            window.location.href = '<?= APP_URL ?>/pages/dashboard/';
+        } else {
+            showError(data.message || 'Invalid or expired code');
+            verifyBtn.disabled = false;
+            verifyBtn.textContent = 'Verify Account';
+        }
+    } catch (err) {
+        showError('An error occurred. Please try again.');
+        verifyBtn.disabled = false;
+        verifyBtn.textContent = 'Verify Account';
+    }
+});
+
+// Handle resend
+resendLink.addEventListener('click', async function(e) {
+    e.preventDefault();
+    
+    if (this.classList.contains('disabled')) return;
+    
+    const originalText = this.textContent;
+    this.textContent = 'Sending...';
+    this.classList.add('disabled');
+    
+    try {
+        const response = await fetch('<?= APP_URL ?>/api/auth/send-verification-otp.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: '<?= htmlspecialchars($verificationData['email'] ?? '') ?>',
+                full_name: '<?= htmlspecialchars($verificationData['full_name'] ?? '') ?>'
+            })
+        });
+
+/* Verify Email Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+.modal-container {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    max-width: 450px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    padding: 24px;
+    border-bottom: 1px solid var(--border);
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.verify-email-content {
+    text-align: center;
+}
+
+.verify-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    background: var(--primary-light, #dbeafe);
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.verify-icon svg {
+    color: var(--primary);
+}
+
+#resendLink.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showError('Code resent successfully!', 'success');
+        } else {
+            showError(data.message || 'Failed to resend code');
+        }
+    } catch (err) {
+        showError('An error occurred');
+    } finally {
+        this.textContent = 'Resent!';
+        setTimeout(() => {
+            this.textContent = originalText;
+            this.classList.remove('disabled');
+        }, 30000);
+    }
+});
+
+function showError(message, type = 'error') {
+    verifyErrorText.textContent = message;
+    verifyError.style.display = 'flex';
+    if (type === 'success') {
+        verifyError.style.backgroundColor = 'var(--success-bg, #d1fae5)';
+        verifyError.style.color = 'var(--success, #10b981)';
+    } else {
+        verifyError.style.backgroundColor = '';
+        verifyError.style.color = '';
+    }
+}
+
+// Prevent modal close
+verifyModal.addEventListener('click', function(e) {
+    if (e.target === verifyModal) {
+        // Don't close on backdrop click
+    }
+});
+<?php endif; ?>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                    <span id="verifyErrorText"></span>
+                </div>
+
+                <form id="verifyForm">
+                    <div class="form-group">
+                        <label class="form-label">Verification Code</label>
+                        <input type="text" id="otpInput" class="form-input" placeholder="Enter 6-digit code" maxlength="6" pattern="[0-9]{6}" required autofocus style="text-align: center; font-size: 1.5rem; letter-spacing: 0.5rem;">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 10px;" id="verifyBtn">
+                        Verify Account
+                    </button>
+                </form>
+                
+                <p style="text-align: center; font-size: 0.875rem; color: var(--text-muted);">
+                    Didn't receive the code? 
+                    <a href="#" id="resendLink" style="color: var(--primary);">Resend Code</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
 
 <script>
 // Password strength indicator

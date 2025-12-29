@@ -50,7 +50,7 @@ require_once dirname(dirname(__DIR__)) . '/includes/header.php';
         </div>
 
         <!-- Form Section -->
-        <div class="login-form-container">
+        <div class="login-form-section">
             <div class="login-header">
                 <h2>Forgot Password</h2>
                 <p id="step-description">Enter your email address to receive a verification code.</p>

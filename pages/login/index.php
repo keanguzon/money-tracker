@@ -28,6 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect('/pages/dashboard/');
         } else {
             $error = $result['message'];
+            if (strpos($error, 'verify your email') !== false) {
+                $error .= ' <a href="/pages/verify-email/?email=' . urlencode($email) . '" style="color: inherit; text-decoration: underline;">Verify now</a>';
+            }
         }
     }
 }

@@ -223,8 +223,8 @@ function findOrCreateOAuthUser($oauthData) {
     $user = $stmt->fetch();
     
     if ($user) {
-        // Link OAuth to existing account
-        $stmt = $db->prepare("UPDATE users SET oauth_provider = ?, oauth_provider_id = ?, avatar = COALESCE(avatar, ?) WHERE id = ?");
+        // Link OAuth to existing account and mark as verified
+        $stmt = $db->prepare("UPDATE users SET oauth_provider = ?, oauth_provider_id = ?, avatar = COALESCE(avatar, ?), is_verified = TRUE WHERE id = ?");
         $stmt->execute([$oauthData['provider'], $oauthData['provider_id'], $oauthData['avatar'], $user['id']]);
         
         // Refresh user data
@@ -241,8 +241,8 @@ function findOrCreateOAuthUser($oauthData) {
     
     try {
         $stmt = $db->prepare("
-            INSERT INTO users (username, email, password, full_name, avatar, oauth_provider, oauth_provider_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO users (username, email, password, full_name, avatar, oauth_provider, oauth_provider_id, is_verified)
+            VALUES (?, ?, ?, ?, ?, ?, ?, TRUE)
         ");
         $stmt->execute([
             $username,

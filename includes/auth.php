@@ -52,13 +52,14 @@ function registerUser($username, $email, $password, $fullName = '') {
     
     // Insert user
     try {
-        $stmt = $db->prepare("INSERT INTO users (username, email, password, full_name) VALUES (?, ?, ?, ?)");
+        // Default is_verified to FALSE for email registration
+        $stmt = $db->prepare("INSERT INTO users (username, email, password, full_name, is_verified) VALUES (?, ?, ?, ?, FALSE)");
         $stmt->execute([$username, $email, $hashedPassword, $fullName]);
         
         $userId = $db->lastInsertId();
         
-        // Auto-login after registration
-        $_SESSION['user_id'] = $userId;
+        // Do NOT auto-login yet, wait for verification
+        // $_SESSION['user_id'] = $userId;
         
         return ['success' => true, 'user_id' => $userId];
     } catch (PDOException $e) {
@@ -84,6 +85,14 @@ function loginUser($email, $password, $remember = false) {
     // Verify password
     if (!password_verify($password, $user['password'])) {
         return ['success' => false, 'message' => 'Invalid email or password'];
+    }
+
+    // Check if verified
+    if (isset($user['is_verified']) && !$user['is_verified']) {
+        // Allow login if it's an OAuth user (they are verified by provider)
+        if (empty($user['oauth_provider'])) {
+            return ['success' => false, 'message' => 'Please verify your email address first.'];
+        }
     }
     
     // Set session
@@ -177,6 +186,46 @@ function updateProfile($userId, $data) {
         return ['success' => true, 'message' => 'Profile updated successfully'];
     } catch (PDOException $e) {
         return ['success' => false, 'message' => 'Update failed. Please try again.'];
+    }
+}
+
+/**
+ * Send verification email
+ */
+function sendVerificationEmail($email, $name) {
+    require_once dirname(__DIR__) . '/config/mail.php';
+    
+    $db = getDB();
+    $otp = generateOTP();
+    $expiresAt = date('Y-m-d H:i:s', strtotime('+15 minutes'));
+    
+    try {
+        // Delete old OTPs
+        $stmt = $db->prepare("DELETE FROM password_resets WHERE email = ?");
+        $stmt->execute([$email]);
+        
+        // Insert new OTP
+        $stmt = $db->prepare("INSERT INTO password_resets (email, token, expires_at) VALUES (?, ?, ?)");
+        $stmt->execute([$email, $otp, $expiresAt]);
+        
+        // Send Email
+        $subject = "Verify Your Email - " . APP_NAME;
+        $htmlContent = "
+            <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;'>
+                <h2>Welcome to " . APP_NAME . "!</h2>
+                <p>Hello " . htmlspecialchars($name) . ",</p>
+                <p>Please use the code below to verify your email address and complete your registration:</p>
+                <div style='background: #f4f4f4; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 5px; margin: 20px 0;'>
+                    $otp
+                </div>
+                <p>This code will expire in 15 minutes.</p>
+            </div>
+        ";
+        
+        return sendEmail($email, $name, $subject, $htmlContent);
+    } catch (Exception $e) {
+        error_log("Verification Email Error: " . $e->getMessage());
+        return false;
     }
 }
 ?>
