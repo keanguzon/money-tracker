@@ -9,14 +9,17 @@ services:
       - key: DB_DRIVER
         value: pgsql
       - key: DB_HOST
+        value: ""
         sync: false
       - key: DB_PORT
         value: "5432"
       - key: DB_NAME
         value: postgres
       - key: DB_USER
+        value: ""
         sync: false
       - key: DB_PASS
+        value: ""
         sync: false
       - key: DB_SSLMODE
         value: require
