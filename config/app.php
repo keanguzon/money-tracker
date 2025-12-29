@@ -18,8 +18,21 @@ if (!defined('APP_URL')) {
     $fallbackUrl = 'http://localhost/money-tracker';
 
     if (!empty($_SERVER['HTTP_HOST']) && !empty($_SERVER['SCRIPT_NAME'])) {
+        // Respect reverse proxy headers (Render, etc.)
+        $forwardedProto = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '';
+        if (is_string($forwardedProto) && str_contains($forwardedProto, ',')) {
+            $forwardedProto = trim(explode(',', $forwardedProto, 2)[0]);
+        }
+
         $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-        $host = $_SERVER['HTTP_HOST'];
+        if ($forwardedProto === 'https' || $forwardedProto === 'http') {
+            $scheme = $forwardedProto;
+        }
+
+        $host = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? $_SERVER['HTTP_HOST'];
+        if (is_string($host) && str_contains($host, ',')) {
+            $host = trim(explode(',', $host, 2)[0]);
+        }
         $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME']);
 
         // Try to infer the project root from common subfolders
